@@ -1,0 +1,46 @@
+﻿@page "/"
+
+@using DevExpressBlazorStarter.Data
+
+@inject WeatherForecastService ForecastService
+
+<DxDataGrid Data="@Forecasts" PageSize="5" ShowFilterRow="true"
+            ShowPager="false"
+            @bind-SingleSelectedDataRow="@Forecast"
+            RowUpdating=@((updatingDataItem, newValues) => OnRowUpdating(updatingDataItem, newValues))
+            RowInserting=@((newValues) => OnRowInserting(newValues))>
+
+    <DxDataGridCommandColumn Width="150px" />
+    <DxDataGridColumn Field="@nameof(WeatherForecast.Date)"></DxDataGridColumn>
+    <DxDataGridColumn Field="@nameof(WeatherForecast.TemperatureC)"></DxDataGridColumn>
+    <DxDataGridColumn Field="@nameof(WeatherForecast.TemperatureF)"></DxDataGridColumn>
+    <DxDataGridComboBoxColumn Data="@WeatherForecastService.Summaries" Field="@nameof(WeatherForecast.Summary)"></DxDataGridComboBoxColumn>
+</DxDataGrid>
+
+@code {
+    WeatherForecast[] Forecasts;
+
+    private WeatherForecast forecast;
+
+    public WeatherForecast Forecast
+    {
+        get { return forecast; }
+        set { forecast = value; }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
+    }
+
+    async void OnRowUpdating(WeatherForecast item, Dictionary<string, object> newValue)
+    {
+
+    }
+
+    async void OnRowInserting(Dictionary<string, object> newValue)
+    {
+
+    }
+
+}
